@@ -1,0 +1,126 @@
+<div class="p-3 mb-2 bg-light text-dark">
+
+<%= render partial: '/welcome/navbar' %>
+
+<%= content_tag :div, class:"room_info", data: {room: @room.id.to_s} do %>
+<% end %>
+
+<div class="container", style="background: white; width: 90%; height: 100%;">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-1">
+		<h3>You are in Room <%= @room.id %></h3>
+		<h5>Player 1: <%= @room.owner.name %></h5>
+
+	  <% if @room.visitor.nil? %>
+		<h5>Player 2: <span id="target">nil</span></h5>
+	  <% else %>
+		<h5>Player 2: <%= @room.visitor.name %></h5>
+	  <% end %>
+
+		<%= button_to "Leave Room", room_path(@room.id), method: :delete, class:"btn btn-info", style:"float: left;" %>
+
+		<%= button_to "New Game", room_path(@room.id), method: :get, class:"btn btn-success", style:"float: left; margin-left: 10px;" %>
+
+		<% @domains = Game.get_domains %>
+
+		<div style="margin-top: 100px;">
+			<%= form_for @game, url: games_path do |f| %>
+				<h3><%= f.label :Category %></h3>
+				<% if @game.domain.nil? %>
+					<%= select_tag "category", options_for_select(@domains), prompt: 'Select', style:"float: left; height: 34px;" %>
+
+					<%= f.hidden_field :owner_id, value: @room.owner_id %>
+					<%= f.hidden_field :visitor_id, value: @room.visitor_id %>
+
+					<%= f.submit "Go", :class => "btn btn-danger", style:"float: left;"%>
+				<% else %>
+					<%= @game.domain %>
+				<% end %>
+			<% end %>
+		</div>
+    </div>
+
+    <div class="col-md-3">
+		<%= render partial: '/welcome/friends' %>
+    </div>
+  </div>
+
+  <div class="row">
+  	<div class="col-md-8">
+  		<div align="center", style="margin-top: 70px;">
+			<% if !@game.id.nil? %>
+
+			  <% if @word.nil? %>
+				<h1 style="letter-spacing: 3px;">
+				  <%= @word = Game.generate_blanks(@game.word).join %>
+				</h1>
+			  <% else %>
+				<h1 style="letter-spacing: 3px;"><%= @word %></h1>
+			  <% end %>
+				
+			  <% @mistake ||= 0 %>
+				
+			  <% if @mistake < 8 && @word.downcase != @game.word %>
+			    <%= form_tag input_path, method: :post do %>
+				  <%= text_field_tag :input, nil, placeholder: "Enter a letter..", style:"height: 34px;" %>
+				  <%= hidden_field_tag :game_id, @game.id %>
+				  <%= hidden_field_tag :word, @word %>
+				  <%= hidden_field_tag :mistake, @mistake %>
+				  <%= hidden_field_tag :wrong, @wrong %>
+
+				  <%= submit_tag "Go", class:"btn btn-danger" %>
+				<% end %>
+			  <% end %>
+			  
+			  <div style="margin-top: 20px;">
+			    <%= label_tag :wrong_attempts %>
+			    <%= text_field_tag :wrong, @wrong.split("").join(", "), disabled: true, class:"form-control", style: "width: 200px;" %>
+			  </div><br>
+				
+			  <div style="margin-top: 50px; margin-bottom: 200px;">
+			    <% if @mistake >= 8 %>
+			      <h3>Correct Answer: <%= @game.word.upcase %></h3>
+				  <h2 style="color: red;"><%=  'Game Over...' %></h2>
+			    <% elsif @word.downcase == @game.word %>
+				  <h2><%=  'You have won!' %></h2>
+			    <% end %>
+			  </div>
+
+			<% end %>
+		</div>
+  	</div>
+
+    <div class="col-md-4">
+    	<% case @mistake %>
+    	<% when 0 %>
+		<%= image_tag "0.png", style:"max-width: 100%; max-height: 100%;" %>
+		<% when 1 %>
+		<%= image_tag "1.png", style:"max-width: 100%; max-height: 100%;" %>
+		<% when 2 %>
+		<%= image_tag "2.png", style:"max-width: 100%; max-height: 100%;" %>
+		<% when 3 %>
+		<%= image_tag "3.png", style:"max-width: 100%; max-height: 100%;" %>
+		<% when 4 %>
+		<%= image_tag "4.png", style:"max-width: 100%; max-height: 100%;" %>
+		<% when 5 %>
+		<%= image_tag "5.png", style:"max-width: 100%; max-height: 100%;" %>
+		<% when 6 %>
+		<%= image_tag "6.png", style:"max-width: 100%; max-height: 100%;" %>
+		<% when 7 %>
+		<%= image_tag "7.png", style:"max-width: 100%; max-height: 100%;" %>
+		<% else %>
+		<%= image_tag "8.png", style:"max-width: 100%; max-height: 100%;" %>
+		<% end %>
+    </div>
+  </div>  
+</div>
+
+
+</div>
+
+
+
+
+
+
+

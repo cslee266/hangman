@@ -1,0 +1,21 @@
+
+  <div class="wrapper">
+    <div class="form-signin">       
+      <h2 class="form-signin-heading">Play Hangman</h2>
+      
+      <%= form_for @user do |f| %>
+
+      <%= f.label :name %>
+      <%= f.text_field :name, class:"form-control" %>      
+
+      <%= f.label :email %>
+      <%= f.text_field :email, class:"form-control" %>
+
+      <%= f.label :password %>
+      <%= f.password_field :password, class:"form-control" %>
+      
+      <%= f.submit "Sign Up", class:"btn btn-lg btn-primary btn-block" %> 
+
+    <% end %>
+    </div>
+  </div>

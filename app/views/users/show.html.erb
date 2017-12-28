@@ -1,0 +1,11 @@
+<h1>User profile</h1>
+
+<% if Relationship.friends?(current_user, params[:id]) %>
+	<div>
+		<%= button_to "Unfriend", user_relationship_path(params[:id]), method: :delete %>
+	</div>
+<% else %>
+	<div>
+		<%= button_to "Add friend", user_relationships_path(params[:id]), method: :post %>
+	</div>
+<% end %>

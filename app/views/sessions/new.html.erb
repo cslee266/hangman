@@ -1,0 +1,28 @@
+
+  <div class="wrapper">
+    <div class="form-signin">       
+      <h2 class="form-signin-heading">Play Hangman</h2>
+      
+      <%= form_for @user, url: sessions_path do |f| %>   
+
+      <%= f.label :email %>
+      <%= f.text_field :email, class:"form-control" %>
+
+      <%= f.label :password %>
+      <%= f.password_field :password, class:"form-control" %>
+      
+      <%= f.submit "Sign In", class:"btn btn-lg btn-primary btn-block" %> 
+    
+    <div class="form-group">
+      <div class="col-md-12 control">
+        <div style="padding-top:15px; font-size:85%" >
+          Don't have an account! 
+          <%= link_to "Sign Up Here", sign_up_path %>
+        </div>
+      </div>
+    </div> 
+    <% end %>
+    </div>
+  </div>
+
+

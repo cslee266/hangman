@@ -1,0 +1,64 @@
+<div class="p-3 mb-2 bg-light text-dark">
+
+<%= render partial: '/welcome/navbar' %>
+
+
+<div class="container", style="background: white; width: 90%; height: 100%;">
+  <div class="row">
+    <div class="col-sm-8 col-md-offset-1">
+        <h1 style="font-color: black; font-weight: 300; text-align: left; margin-left: 30px;">Welcome, <%= @user.name %></h1>
+		
+        <% if @users %>
+			<table class="table">
+			  <thead>
+			    <tr>
+			      <th scope="col">ID</th>
+			      <th scope="col">Name</th>
+			      <th scope="col"></th>
+			    </tr>
+			  </thead>
+			  <tbody>
+				<% @users.each do |user| %>
+				    <tr>
+				      <td scope="row"><%= user.id %></td>
+				      <td><%= user.name %></td>
+
+				<% if Relationship.friends?(current_user, user.id) %>
+					<% rel = Relationship.find_by(user_id: current_user.id, friend_id: user.id) %>
+					  <td>
+						<%= button_to "Unfriend", user_relationship_path(user.id, rel.id), method: :delete, class:"btn btn-danger" %>
+					  </td>
+				<% else %>
+					  <td>
+						<%= button_to "Add friend", user_relationships_path(user.id), method: :post, class:"btn btn-danger" %>
+					  </td>
+				<% end %>
+				    </tr>
+				<% end %>
+			  </tbody>
+			</table>
+		<% end %>
+
+	    <div style="margin-left: 30px;">
+			<% if @user.room.nil? %>
+				<%= button_to "Create Room", rooms_path, method: :post, class:"btn btn-danger" %>
+			<% else %>
+				<%= button_to "Enter Room", room_path(@room.id), method: :get, class:"btn btn-danger", style:"float: left;" %>
+
+				<%= button_to "Leave Room", room_path(@user.room.id), method: :delete, class:"btn btn-danger", style:"float: left; margin-left: 10px;" %>
+			<% end %>
+	    </div>
+
+	    <div style="margin-top: 20px;">
+	    	<%= image_tag "hangman.png", style:"max-width: 100%; max-height: 100%;" %>
+	    </div>
+    </div>
+
+    <div class="col-sm-3">
+		<%= render partial: '/welcome/friends' %>
+    </div>
+  </div>
+</div>
+
+
+</div>
